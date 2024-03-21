@@ -1,5 +1,7 @@
 //! Interface for the syllables and accompanying lookups used when encoding and decoding. 
 
+use std::iter;
+
 use include_bytes_plus::include_bytes;
 
 /// Gets the ascii string of a syllable identified by its index. 
@@ -16,14 +18,15 @@ pub fn longest_prefix_of(string: &str) -> Option<(u8, usize)> {
     let mut len = 0;
 
     for char in string.chars() {
-        let char: Option<u8> = char.try_into().ok();
-        match char.and_then(|ascii| node.child(ascii)) {
-            Some(child) => {
-                node = child;
-                len += 1;
-            }
-            None => break
-        }
+        let child = char
+            .try_into()
+            .ok()
+            .and_then(|ascii| node.child(ascii));
+        let Some(child) = child else {
+            break
+        };
+        node = child;
+        len += 1;
     }
     node.syllable().map(|syllable| (syllable, len))    
 }
@@ -33,8 +36,8 @@ pub fn longest_prefix_of(string: &str) -> Option<(u8, usize)> {
 pub fn char_follows(char: u8, syllable: &[u8]) -> bool {
     syllable.iter()
         .copied()
+        .chain(iter::once(char))
         .try_fold(Node::root(), Node::child)
-        .and_then(|node| node.child(char.into()))
         .is_some()
 }
 
