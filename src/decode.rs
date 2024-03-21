@@ -69,7 +69,7 @@ pub fn decode_with_settings(string: impl AsRef<str>, checksum: Checksum) -> Resu
 fn decode_mono(mut string: &str, checksum: Checksum) -> Result<Vec<u8>> {
     let mut buffer = Vec::with_capacity(string.len() / 2);
 
-    // decode raw bytes from string. the bytes are still hash-xor encoded and may have a checksum at the end
+    // decode raw bytes from string. the bytes are still run-encoded and may have a checksum at the end
     while !string.is_empty() {
         // find the longest valid syllable at the beginning of the string
         let (index, length) = syllables::longest_prefix_of(string)
