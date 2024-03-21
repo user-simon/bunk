@@ -1,0 +1,20 @@
+[package]
+name = "bunk"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+include-bytes-plus = "1.1"
+thiserror = "1.0"
+serde = { version = "1.0", optional = true }
+
+[dev-dependencies]
+rand = { version="0.8.5", features=["small_rng"] }
+criterion = "0.5.1"
+
+[features]
+serde = ["dep:serde"]
+
+[[bench]]
+name = "speed"
+harness = false
