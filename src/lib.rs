@@ -1,6 +1,6 @@
 //! Fast and efficient human-readable data encoding! 
 //! 
-//! Bunk encodes binary data as pronounceable gibberish, somewhat resembling latin. This is useful when
+//! Bunk encodes binary data as pronounceable gibberish, somewhat resembling Latin. This is useful when
 //! binary data such as an encryption key is shown to an end-user who might need to manually transfer it. 
 //! 
 //! Using the default [settings](Settings), a string of 32 bytes gets encoded as: 
@@ -21,7 +21,8 @@
 //! ~0.8µs with the default settings --- allocations and all; no hidden fees. 
 //! - It is small! Bunk stores a table of only 256 syllables, each between 1-4 letters (average of 2.47), and
 //! some data structures needed for fast lookup. 
-//! - Checksums of variable length can be added to encoded messages to verify data integrity when decoding. 
+//! - Checksums of variable length can be added to encoded messages to verify data integrity when decoding,
+//! which protects against typos. 
 //! - The [maximum word length](Settings::word_len) (in syllables) can be customized. 
 //! 
 //! 
@@ -32,7 +33,8 @@
 //! to be efficient in the amount of data a string of words can encode, a _massive_ table of (sometimes
 //! quite long) words must be included --- [bip39](https://docs.rs/tiny-bip39/) uses 2048 words. In addition
 //! to this, some kind of data structure for lookup is also needed, and will likely have to be constructed at
-//! runtime. 
+//! runtime. If this  is of no object to your application, use something like
+//! [bip39](https://docs.rs/tiny-bip39/) instead!
 //! 
 //! Bunk takes a different approach, requiring a table of only 256 1-4 letter syllables, each carrying one
 //! byte of data. This allows Bunk to: 
@@ -156,7 +158,7 @@
 //! user-friendly, we'd ideally also like _all_ inputs to yield equally pronounceable text. Without any
 //! further measures, inputs such as `[0, 0, 0, 0]` yield repeated syllables, in this case "uuu u". To avoid
 //! this, Bunk artificially increases the _apparent_ entropy of encoded bytes by first XORing them with a
-//! value dependant on their index. Since XOR undoes itself, the decoder can then do the exact same thing and
+//! value dependent on their index. Since XOR undoes itself, the decoder can then do the exact same thing and
 //! retrieve the original bytes. With this in place, `[0, 0, 0, 0]` gets nicely encoded as "trirori mulry". 
 
 mod encode;
