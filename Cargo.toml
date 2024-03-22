@@ -2,6 +2,11 @@
 name = "bunk"
 version = "0.1.0"
 edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Fast and efficient human-readable data encoding!"
+repository = "https://github.com/user-simon/bunk"
+keywords = ["readable", "encoding", "pronounceable"]
+categories = ["encoding"]
 
 [dependencies]
 include-bytes-plus = "1.1"
