@@ -1,7 +1,6 @@
 //! Interface for the syllables and accompanying lookups used when encoding and decoding. 
 
 use std::iter;
-
 use include_bytes_plus::include_bytes;
 
 /// Gets the ascii string of a syllable identified by its index. 

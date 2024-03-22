@@ -25,13 +25,58 @@ impl Default for Settings {
 }
 
 /// Encodes data using the default [settings](Settings). 
+/// 
+/// The data can then be decoded using [`decode`](crate::decode()). 
+/// 
+/// # Examples
+/// 
+/// ```
+/// let encoded = bunk::encode(b"aftersun");
+/// let decoded = bunk::decode(encoded)?;
+/// 
+/// assert_eq!(decoded, b"aftersun");
+/// # Ok::<(), bunk::InvalidData>(())
+/// ```
 pub fn encode(data: impl AsRef<[u8]>) -> String {
     encode_with_settings(data, Settings::default())
 }
 
 /// Encodes data using given [settings](Settings). 
 /// 
-/// Note that the checksum settings used when decoding must match the ones used here. 
+/// The data can then be decoded using [`decode_with_settings`]. Note that the [checksum settings](Checksum)
+/// used when decoding must match the ones [used here](Settings::checksum). 
+/// 
+/// # Examples
+/// 
+/// Disabled [checksum](Settings::checksum): 
+/// ```
+/// use bunk::{Checksum, Settings};
+/// 
+/// let settings = Settings {
+///     checksum: Checksum::Disabled, 
+///     ..Default::default()
+/// };
+/// let encoded = bunk::encode_with_settings(b"aftersun", settings);
+/// let decoded = bunk::decode_with_settings(encoded, settings.checksum)?;
+/// 
+/// assert_eq!(decoded, b"aftersun");
+/// # Ok::<(), bunk::InvalidData>(())
+/// ```
+/// 
+/// Custom [word length limit](Settings::word_len): 
+/// ```
+/// use bunk::{Checksum, Settings};
+/// 
+/// let settings = Settings {
+///     word_len: Some(5), 
+///     ..Default::default()
+/// };
+/// let encoded = bunk::encode_with_settings([231, 6, 39, 34], settings);
+/// let decoded = bunk::decode(encoded)?; // word_len doesn't affect the decoder
+/// 
+/// assert_eq!(decoded, [231, 6, 39, 34]);
+/// # Ok::<(), bunk::InvalidData>(())
+/// ```
 pub fn encode_with_settings(data: impl AsRef<[u8]>, settings: Settings) -> String {
     // factored out non-generic code to reduce code size
     encode_mono(data.as_ref(), settings)

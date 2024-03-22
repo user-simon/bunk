@@ -21,10 +21,11 @@ pub enum InvalidData {
 /// Result of decoding data. 
 pub type Result<T> = std::result::Result<T, InvalidData>;
 
-/// Decodes a string using the default [settings](Checksum). 
+/// Decodes a string using the default [checksum settings](Checksum). 
 /// 
-/// Use this only if the default checksum setting was used when encoding the string. All other
-/// [encoding settings](crate::Settings) are ignored when decoding. 
+/// Use this only if the default checksum setting was used when encoding the string (e.g., if
+/// [`encode`](encode()) was used). All other [encoding settings](crate::Settings) are ignored when
+/// decoding. 
 /// 
 /// # Examples
 /// 
@@ -39,13 +40,14 @@ pub fn decode(string: impl AsRef<str>) -> Result<Vec<u8>> {
     decode_with_settings(string, Checksum::default())
 }
 
-/// Decodes a string using given checksum settings. 
+/// Decodes a string using given [checksum settings](Checksum). 
 /// 
 /// The checksum setting must match the one used when the string was encoded. All other
 /// [encoding settings](crate::Settings) are ignored when decoding. 
 /// 
 /// # Examples
 /// 
+/// Disabled checksum: 
 /// ```
 /// use bunk::{Checksum, Settings};
 /// 
