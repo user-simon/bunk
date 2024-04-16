@@ -85,13 +85,13 @@ impl Node {
 
     /// Perform a given transition to a child node. 
     fn child(self, char: u8) -> Option<Node> {
-        const CODES: [u8; 26] = include_bytes!("static/code_map.bin");
+        const TRANSLATION: [u8; 26] = include_bytes!("static/translation.bin");
 
-        // translate ascii char code to its letter index, which is used as the transition label
+        // translate ascii char code to a mangled code representing the transition
         let code = char
             .to_ascii_lowercase()
             .checked_sub(b'a')
-            .and_then(|code| CODES.get(code as usize))
+            .and_then(|code| TRANSLATION.get(code as usize))
             .map(|&code| code as u32)?;
 
         // compute the child node
